@@ -18,7 +18,7 @@
 @endif
 
 <div class="overflow-x-auto">
-    <table class="min-w-full bg-white shadow rounded-lg table-fixed">
+    <table class="min-w-full bg-white shadow rounded-lg table-fixed" >
         <thead class="bg-gray-100 border-b">
             <tr>
                 <th class="w-1/4 text-center p-3 font-medium text-gray-700">عنوان</th>

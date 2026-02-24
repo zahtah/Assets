@@ -14,7 +14,7 @@
 @endif
 
 <div class="overflow-x-auto shadow rounded-lg">
-    <table class="min-w-full table-fixed bg-white">
+    <table class="min-w-full table-fixed bg-white" style="width: 100%;">
         <thead class="bg-gray-100 border-b">
             <tr>
                 <th class="w-1/3 text-center p-3 font-medium text-gray-700">نام</th>
