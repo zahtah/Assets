@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-DYhSG4Ot.css",
+    "file": "assets/app-BPGLP5tm.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -8,13 +8,13 @@
       "app.css"
     ]
   },
-  "resources/fonts/IranSans/woff/IRANSansX-Thin.woff": {
-    "file": "assets/IRANSansX-Thin-DmiMVDL-.woff",
-    "src": "resources/fonts/IranSans/woff/IRANSansX-Thin.woff"
+  "resources/fonts/IranSans/woff/IRANSansX-Regular.woff": {
+    "file": "assets/IRANSansX-Regular-svuyfzzO.woff",
+    "src": "resources/fonts/IranSans/woff/IRANSansX-Regular.woff"
   },
-  "resources/fonts/IranSans/woff2/IRANSansX-Thin.woff2": {
-    "file": "assets/IRANSansX-Thin-ItjKZkfC.woff2",
-    "src": "resources/fonts/IranSans/woff2/IRANSansX-Thin.woff2"
+  "resources/fonts/IranSans/woff2/IRANSansX-Regular.woff2": {
+    "file": "assets/IRANSansX-Regular-JITyl92W.woff2",
+    "src": "resources/fonts/IranSans/woff2/IRANSansX-Regular.woff2"
   },
   "resources/js/app.js": {
     "file": "assets/app-CBbTb_k3.js",

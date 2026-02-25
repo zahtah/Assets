@@ -10,20 +10,31 @@
 <body class="bg-gray-100">
 
 <nav class="bg-white shadow p-4 flex justify-between">
-    <div>
-        <a href="{{ route('assets.index') }}" class="font-bold">سیستم اموال</a>
+    <div class="flex items-center gap-4">
+        @if(auth()->user()->role === 'user')
+            <a href="{{ route('assets.index') }}"
+            class="px-4 py-2 bg-blue-600 text-gray-800 font-bold rounded-lg shadow hover:bg-blue-700 transition">
+                سیستم اموال
+            </a>
+        @endif
+        @if(auth()->user()->role === 'admin')
+            <a href="{{ route('admin.alerts.index') }}"
+            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow hover:bg-gray-300 transition">
+                هشدارها
+            </a>
+        @endif
     </div>
-
-    <div class="flex gap-4">
-        <span>{{ auth()->user()->name }}</span>
+    
+    <div class="flex items-center gap-4">
+        <span>سلام {{ auth()->user()->name }}</span>
 
         @if(auth()->user()->role === 'admin')
-            <a href="{{ route('admin.users') }}" class="text-blue-600">پنل ادمین</a>
+            <a href="{{ route('admin.users') }}" class="text-blue-600 px-4 py-2 bg-gray-200 font-bold rounded-lg shadow hover:bg-blue-700 transition">پنل ادمین</a>
         @endif
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button class="text-red-600">خروج</button>
+            <button class="text-red-600 px-4 py-2 bg-gray-200 font-bold rounded-lg shadow hover:bg-blue-700 transition">خروج</button>
         </form>
     </div>
 </nav>
