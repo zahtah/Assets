@@ -4,9 +4,19 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+    $user = Auth::user();
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.users');
+    }
+
+    return redirect()->route('assets.index');
 });
 
 Route::get('/dashboard', function () {
@@ -43,6 +53,13 @@ Route::middleware(['auth','is_admin'])->group(function () {
 
     Route::delete('/admin/users/{user}/assets/{asset}', [AdminController::class, 'destroyAsset'])
         ->name('admin.users.assets.destroy');
+    // فرم افزودن مال برای کاربر
+    Route::get('/admin/users/{user}/assets/create', [AdminController::class, 'createUserAsset'])
+        ->name('admin.users.assets.create');
+
+    // ذخیره مال
+    Route::post('/admin/users/{user}/assets', [AdminController::class, 'storeUserAsset'])
+        ->name('admin.users.assets.store');
 });
 
 require __DIR__.'/auth.php';

@@ -18,4 +18,16 @@ export default {
     },
 
     plugins: [forms],
+    content: [
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['IRANSans', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
 };

@@ -80,4 +80,33 @@ class AdminController extends Controller
         return redirect()->route('admin.users.showUserAssets', $user)
                         ->with('success', 'مال با موفقیت حذف شد.');
     }
+    //////////////////////////////////////////////////
+    // فرم افزودن مال
+    public function createUserAsset(User $user)
+    {
+        return view('admin.create-user-asset', compact('user'));
+    }
+
+    //////////////////////////////////////////////////
+    // ذخیره مال
+    public function storeUserAsset(Request $request, User $user)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'asset_number' => 'required|string|max:100',
+            'city' => 'required|string|max:100',
+            'updated_at_date' => 'required|date',
+        ]);
+        $updated_at = CalendarUtils::createCarbonFromFormat('Y/m/d', $request->updated_at_date);
+        $user->assets()->create([
+            'title' => $request->title,
+            'asset_number' => $request->asset_number,
+            'city' => $request->city,
+            'updated_at_date' => $updated_at,
+        ]);
+
+        return redirect()
+            ->route('admin.users.showUserAssets', $user)
+            ->with('success','مال جدید ثبت شد');
+    }
 }
