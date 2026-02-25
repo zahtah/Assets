@@ -4,8 +4,8 @@
 
 @font-face {
     font-family: 'IRANSans';
-    src: url('../fonts/IranSans/woff2/IRANSansX-Thin.woff2') format('woff2'),
-         url('../fonts/IranSans/woff/IRANSansX-Thin.woff') format('woff');
+    src: url('../fonts/IranSans/woff2/IRANSansX-Regular.woff2') format('woff2'),
+         url('../fonts/IranSans/woff/IRANSansX-Regular.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }

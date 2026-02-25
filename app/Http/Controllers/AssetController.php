@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Morilog\Jalali\CalendarUtils;
 use Carbon\Carbon;
 use App\Models\UserActivityLog;
+use App\Models\AssetDuplicateAlert;
 
 class AssetController extends Controller
 {
@@ -25,6 +26,19 @@ class AssetController extends Controller
     }
     public function store(Request $request)
     {
+        $existingAsset = Asset::where('asset_number', $request->asset_number)->first();
+
+        if ($existingAsset) {
+
+            AssetDuplicateAlert::create([
+                'new_user_id' => $request->user()->id,
+                'original_user_id' => $existingAsset->user_id,
+                'asset_number' => $request->asset_number,
+                'original_created_at' => $existingAsset->created_at,
+                'is_read' => false
+            ]);
+        }
+
         $request->validate([
             'title' => 'required',
             'asset_number' => 'required',

@@ -60,6 +60,12 @@ Route::middleware(['auth','is_admin'])->group(function () {
     // ذخیره مال
     Route::post('/admin/users/{user}/assets', [AdminController::class, 'storeUserAsset'])
         ->name('admin.users.assets.store');
+
+    Route::get('alerts', [AdminController::class, 'alerts'])
+    ->name('admin.alerts.index');
+
+    Route::post('alerts/mark-as-read', [AdminController::class, 'markAlertsRead'])
+    ->name('admin.alerts.markRead');
 });
 
 require __DIR__.'/auth.php';

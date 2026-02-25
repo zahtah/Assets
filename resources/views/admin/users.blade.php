@@ -6,6 +6,15 @@
     <h2 class="text-2xl font-bold text-gray-800">لیست کاربران</h2>
 </div>
 
+@if($newAlertsCount > 0)
+    <div class="mb-4 text-center">
+        <a href="{{ route('admin.alerts.index') }}"
+           class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded shadow relative">
+            🔔 هشدار جدید ({{ $newAlertsCount }})
+        </a>
+    </div>
+@endif
+
 {{-- پیام موفقیت --}}
 @if(session('success'))
     <div class="mb-4 p-3 bg-green-100 text-green-700 rounded shadow">
@@ -18,7 +27,7 @@
         <thead class="bg-gray-100 border-b">
             <tr>
                 <th class="w-1/3 text-center p-3 font-medium text-gray-700">نام</th>
-                <th class="w-1/3 text-center p-3 font-medium text-gray-700">ایمیل</th>
+                {{-- <th class="w-1/3 text-center p-3 font-medium text-gray-700">ایمیل</th> --}}
                 <th class="w-1/3 text-center p-3 font-medium text-gray-700">IP آخرین ثبت</th>
                 <th class="w-1/3 text-center p-3 font-medium text-gray-700">نام سیستم</th>
                 <th class="w-1/3 text-center p-3 font-medium text-gray-700">عملیات</th>
@@ -28,7 +37,7 @@
             @forelse($users as $user)
                 <tr class="border-b hover:bg-gray-50 transition duration-150">
                     <td class="p-3 text-center text-gray-800">{{ $user->name }}</td>
-                    <td class="p-3 text-center text-gray-800">{{ $user->email }}</td>
+                    {{-- <td class="p-3 text-center text-gray-800">{{ $user->email }}</td> --}}
                     <td class="p-3 text-center text-gray-800">
                         {{ $user->latestLog->ip_address ?? '—' }}
                     </td>

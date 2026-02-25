@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Morilog\Jalali\CalendarUtils;
 use Carbon\Carbon;
+use App\Models\AssetDuplicateAlert;
 
 class AdminController extends Controller
 {
@@ -22,8 +23,8 @@ class AdminController extends Controller
         // $users = User::all();
         // return view('admin.users', compact('users'));
         $users = User::with('latestLog')->paginate(10);
-
-        return view('admin.users', compact('users'));
+        $newAlertsCount = AssetDuplicateAlert::where('is_read', false)->count();
+        return view('admin.users', compact('users','newAlertsCount'));
     }
 
     // نمایش لیست اموال یک کاربر
@@ -108,5 +109,21 @@ class AdminController extends Controller
         return redirect()
             ->route('admin.users.showUserAssets', $user)
             ->with('success','مال جدید ثبت شد');
+    }
+    public function alerts()
+    {
+        $alerts = AssetDuplicateAlert::with(['newUser','originalUser'])
+                    ->latest()
+                    ->get();
+
+        return view('admin.alerts', compact('alerts'));
+    }
+
+    public function markAlertsRead()
+    {
+        AssetDuplicateAlert::where('is_read', false)
+            ->update(['is_read' => true]);
+
+        return redirect()->route('admin.alerts.index');
     }
 }
