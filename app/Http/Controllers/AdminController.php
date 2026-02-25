@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Morilog\Jalali\CalendarUtils;
 use Carbon\Carbon;
 use App\Models\AssetDuplicateAlert;
+use App\Exports\AssetsExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class AdminController extends Controller
 {
@@ -125,5 +128,10 @@ class AdminController extends Controller
             ->update(['is_read' => true]);
 
         return redirect()->route('admin.alerts.index');
+    }
+    
+    public function exportAssets()
+    {
+        return Excel::download(new AssetsExport, 'all-assets.xlsx');
     }
 }

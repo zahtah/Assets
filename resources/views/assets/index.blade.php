@@ -11,11 +11,11 @@
 </div>
 
 {{-- پیام موفقیت --}}
-@if(session('success'))
+{{-- @if(session('success'))
     <div class="mb-4 p-3 bg-green-100 text-green-700 rounded shadow">
         {{ session('success') }}
     </div>
-@endif
+@endif --}}
 
 <div class="overflow-x-auto">
     <table class="min-w-full bg-white shadow rounded-lg table-fixed" >

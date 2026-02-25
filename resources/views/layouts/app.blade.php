@@ -22,6 +22,10 @@
             class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow hover:bg-gray-300 transition">
                 هشدارها
             </a>
+            <a href="{{ route('admin.export.assets') }}" 
+            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow hover:bg-gray-300 transition">
+            دریافت خروجی اکسل اموال
+            </a>
         @endif
     </div>
     

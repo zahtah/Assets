@@ -66,6 +66,10 @@ Route::middleware(['auth','is_admin'])->group(function () {
 
     Route::post('alerts/mark-as-read', [AdminController::class, 'markAlertsRead'])
     ->name('admin.alerts.markRead');
+
+    Route::get('/admin/export-assets', [AdminController::class, 'exportAssets'])
+    ->middleware(['auth'])
+    ->name('admin.export.assets');
 });
 
 require __DIR__.'/auth.php';
