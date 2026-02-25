@@ -1,0 +1,25 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-DYhSG4Ot.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/fonts/IranSans/woff/IRANSansX-Thin.woff": {
+    "file": "assets/IRANSansX-Thin-DmiMVDL-.woff",
+    "src": "resources/fonts/IranSans/woff/IRANSansX-Thin.woff"
+  },
+  "resources/fonts/IranSans/woff2/IRANSansX-Thin.woff2": {
+    "file": "assets/IRANSansX-Thin-ItjKZkfC.woff2",
+    "src": "resources/fonts/IranSans/woff2/IRANSansX-Thin.woff2"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-CBbTb_k3.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}
