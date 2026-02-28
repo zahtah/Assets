@@ -6,11 +6,6 @@
     <h2 class="text-2xl font-bold text-gray-800">لیست کاربران</h2>
 </div>
 
-<a href="{{ route('admin.export.assets') }}" 
-   class="btn btn-success mb-3">
-   دریافت خروجی اکسل اموال
-</a>
-
 @if($newAlertsCount > 0)
     <div class="mb-4 text-center">
         <a href="{{ route('admin.alerts.index') }}"
