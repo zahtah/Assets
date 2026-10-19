@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -17,10 +18,26 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    /** گزینه‌های طبقه */
+    public const FLOORS = ['زیرزمین', 'همکف', 'اول', 'دوم'];
+
+    /** نقش‌هایی که ادمین می‌تواند هنگام ساخت/ویرایش کاربر انتخاب کند */
+    public const ASSIGNABLE_ROLES = [
+        'user'      => 'کاربر عادی',
+        'warehouse' => 'واحد انبار',
+    ];
+
     protected $fillable = [
         'name',
         'email',
+        'department',
+        'unit',
+        'room_number',
+        'floor',
+        'allow_editing',
         'password',
+        'new_comment',
+        'show_contract_button', // اضافه شد
     ];
 
     /**
@@ -57,5 +74,36 @@ class User extends Authenticatable
     public function latestLog()
     {
         return $this->hasOne(UserActivityLog::class)->latestOfMany();
+    }
+    // آخرین ورود به سیستم (نه هر فعالیتی)
+    public function latestLogin()
+    {
+        return $this->hasOne(UserActivityLog::class)->ofMany(
+            ['id' => 'max'],
+            function ($query) {
+                $query->where('action', UserActivityLog::ACTION_LOGIN);
+            }
+        );
+    }
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+    public function isWarehouse(): bool
+    {
+        return $this->role === 'warehouse';
+    }
+    /** صفحه‌ی اصلی هر نقش بعد از ورود */
+    public function homeRoute(): string
+    {
+        return match ($this->role) {
+            'admin'     => 'all-users',
+            'warehouse' => 'warehouse.index',
+            default     => 'assets.index',
+        };
+    }
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 }

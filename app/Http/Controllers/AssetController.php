@@ -9,9 +9,11 @@ use Morilog\Jalali\CalendarUtils;
 use Carbon\Carbon;
 use App\Models\UserActivityLog;
 use App\Models\AssetDuplicateAlert;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AssetController extends Controller
 {
+    use AuthorizesRequests;
     //
     public function index()
     {
@@ -28,12 +30,15 @@ class AssetController extends Controller
     {
         $existingAsset = Asset::where('asset_number', $request->asset_number)->first();
 
-        if ($existingAsset) {
+        // اگر مالِ قبلی در انبار (بدون مالک) باشد، مالک قبلی‌ای برای هشدار وجود ندارد
+        if ($existingAsset && $existingAsset->user_id) {
 
             AssetDuplicateAlert::create([
                 'new_user_id' => $request->user()->id,
                 'original_user_id' => $existingAsset->user_id,
                 'asset_number' => $request->asset_number,
+                'count' => $request->count,
+                'description' => $request->description,
                 'original_created_at' => $existingAsset->created_at,
                 'is_read' => false
             ]);
@@ -42,7 +47,9 @@ class AssetController extends Controller
         $request->validate([
             'title' => 'required',
             'asset_number' => 'required',
-            'city' => 'required',
+            'count' => 'required',
+            'description' => 'required',
+            'city' => '',
             'updated_at_date' => 'required|date',
         ]);
 
@@ -52,8 +59,12 @@ class AssetController extends Controller
             'user_id' => $request->user()->id,
             'title' => $request->title,
             'asset_number' => $request->asset_number,
-            'city' => $request->city,
+            'count' => $request->count,
+            'description' => $request->description,
+            'city' =>"",
             'updated_at_date' => $updated_at, // ذخیره به میلادی
+            'user_approved' => false,
+            'admin_approved' => false,
         ]);
 
          ////////////////////////////////////////////////////////
@@ -82,6 +93,9 @@ class AssetController extends Controller
         if ($asset->user_id !== $request->user()->id) {
             abort(403);
         }
+        $asset->update([
+            'user_new_comment' => 0
+        ]);
 
         return view('assets.edit', compact('asset'));
     }
@@ -96,18 +110,19 @@ class AssetController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'asset_number' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
+            'count' => 'required',
+            'description' => 'required',
+            'city' => '',
             'updated_at_date' => 'required|date',
+            'comment' => 'nullable|string',
         ]);
 
-        $updated_at = CalendarUtils::createCarbonFromFormat('Y/m/d', $request->updated_at_date);
-
-        $asset->update([
-            'title' => $request->title,
-            'asset_number' => $request->asset_number,
-            'city' => $request->city,
-            'updated_at_date' => $updated_at,
-        ]);
+        // تاریخ بروزرسانی با هر تغییر واقعی خودکار امروز می‌شود و تغییرات در تاریخچه ثبت می‌گردد
+        $asset->comment = $request->comment;
+        $asset->applyEdit($request->only(Asset::TRACKED_FIELDS), $request->user()->id, $request->updated_at_date);
+        if ($asset->isDirty()) {
+            $asset->save();
+        }
 
         return redirect()->route('assets.index')
                          ->with('success', 'مال با موفقیت بروزرسانی شد.');
@@ -124,6 +139,15 @@ class AssetController extends Controller
 
         return redirect()->route('assets.index')
                          ->with('success', 'مال با موفقیت حذف شد.');
+    }
+    public function toggleUserApproval(Asset $asset)
+    {
+        // فقط مالک بتواند
+        //$this->authorize('update', $asset);
+
+        $asset->update(['user_approved' => !$asset->user_approved]);
+
+        return back()->with('success', 'وضعیت تایید شما تغییر یافت.');
     }
     
 }

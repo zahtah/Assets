@@ -28,8 +28,28 @@
         @enderror
     </div>
 
-    {{-- ستاد --}}
+    {{-- تعداد --}}
     <div class="mb-4">
+        <label class="block mb-1">تعداد </label>
+        <input type="number" name="count" value="{{ old('count', $asset->count) }}"
+               class="w-full border p-2 rounded">
+        @error('count')
+            <div class="text-red-600 mt-1">{{ $message }}</div>
+        @enderror
+    </div>
+
+    {{-- توضیحات --}}
+    <div class="mb-4">
+        <label class="block mb-1">توضیحات </label>
+        <input type="text" name="description" value="{{ old('description', $asset->description) }}"
+               class="w-full border p-2 rounded">
+        @error('description')
+            <div class="text-red-600 mt-1">{{ $message }}</div>
+        @enderror
+    </div>
+
+    {{-- ستاد --}}
+    {{-- <div class="mb-4">
         <label class="block mb-1">ستاد</label>
         <select name="city" class="w-full border p-2 rounded">
             @php $cities = ['مرکزی','سمنان','شاهرود','دامغان','گرمسار','میامی','مهدیشهر']; @endphp
@@ -42,11 +62,12 @@
         @error('city')
             <div class="text-red-600 mt-1">{{ $message }}</div>
         @enderror
-    </div>
+    </div> --}}
 
     {{-- تاریخ --}}
     <div class="mb-4">
         <label class="block mb-1">تاریخ بروزرسانی</label>
+        <p class="text-sm text-gray-500 mb-1">با ذخیره‌ی هر تغییر در مشخصات مال، این تاریخ خودکار برابر امروز می‌شود (مگر اینکه خودتان تاریخ دیگری وارد کنید).</p>
         <input type="text" name="updated_at_date" id="updated_at_date"
             class="w-full border p-2 rounded"
             value="{{ old('updated_at_date', \Morilog\Jalali\Jalalian::fromCarbon(\Carbon\Carbon::parse($asset->updated_at_date))->format('Y/m/d') ?? '') }}">

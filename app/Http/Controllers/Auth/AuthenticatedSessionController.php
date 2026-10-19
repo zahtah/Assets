@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\UserActivityLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,11 +31,11 @@ class AuthenticatedSessionController extends Controller
 
         //return redirect()->intended(route('dashboard', absolute: false));
         $user = Auth::user();
-        if ($user->role == 'admin') {
-            return redirect()->route('admin.users');
-        }
 
-        return redirect()->route('assets.index');
+        // ثبت ورود کاربر در لاگ (IP، نام سیستم، تاریخ و ساعت)
+        UserActivityLog::record($user, $request, UserActivityLog::ACTION_LOGIN);
+
+        return redirect()->route($user->homeRoute());
     }
 
     /**

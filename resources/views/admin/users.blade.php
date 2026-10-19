@@ -2,70 +2,65 @@
 
 @section('content')
 
-<div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-bold text-gray-800">لیست کاربران</h2>
+<div class="page-header">
+    <div>
+        <h1>لاگ ورود کاربران</h1>
+        <p>آخرین ورود هر کاربر به سیستم (تاریخ شمسی، به وقت تهران)</p>
+    </div>
 </div>
 
-@if($newAlertsCount > 0)
-    <div class="mb-4 text-center">
-        <a href="{{ route('admin.alerts.index') }}"
-           class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded shadow relative">
-            🔔 هشدار جدید ({{ $newAlertsCount }})
-        </a>
-    </div>
-@endif
+<div class="card" style="overflow:hidden;">
+    <form action="{{ route('admin.users') }}" method="GET" class="toolbar">
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="جستجو بر اساس نام..." style="width:240px;">
+        <button type="submit" class="btn btn-primary">جستجو</button>
+        @if(request('search') !== null && request('search') !== '')
+            <a href="{{ route('admin.users') }}" class="btn btn-ghost">پاک کردن فیلتر</a>
+        @endif
+    </form>
 
-{{-- پیام موفقیت --}}
-@if(session('success'))
-    <div class="mb-4 p-3 bg-green-100 text-green-700 rounded shadow">
-        {{ session('success') }}
-    </div>
-@endif
-
-<div class="overflow-x-auto shadow rounded-lg">
-    <table class="min-w-full table-fixed bg-white" style="width: 100%;">
-        <thead class="bg-gray-100 border-b">
-            <tr>
-                <th class="w-1/3 text-center p-3 font-medium text-gray-700">نام</th>
-                {{-- <th class="w-1/3 text-center p-3 font-medium text-gray-700">ایمیل</th> --}}
-                <th class="w-1/3 text-center p-3 font-medium text-gray-700">IP آخرین ثبت</th>
-                <th class="w-1/3 text-center p-3 font-medium text-gray-700">نام سیستم</th>
-                <th class="w-1/3 text-center p-3 font-medium text-gray-700">عملیات</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($users as $user)
-                <tr class="border-b hover:bg-gray-50 transition duration-150">
-                    <td class="p-3 text-center text-gray-800">{{ $user->name }}</td>
-                    {{-- <td class="p-3 text-center text-gray-800">{{ $user->email }}</td> --}}
-                    <td class="p-3 text-center text-gray-800">
-                        {{ $user->latestLog->ip_address ?? '—' }}
-                    </td>
-
-                    <td class="p-3 text-center text-gray-800">
-                        {{ $user->latestLog->hostname ?? '—' }}
-                    </td>
-                    <td class="p-3 text-center">
-                        <a href= "{{ route('admin.users.showUserAssets', $user->id) }}"
-                           class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded shadow transition duration-200">
-                           مشاهده اموال
-                        </a>
-                    </td>
-                </tr>
-            @empty
+    <div style="overflow-x:auto;">
+        <table class="tbl">
+            <thead>
                 <tr>
-                    <td colspan="3" class="p-4 text-center text-gray-500">
-                        هیچ کاربری ثبت نشده است.
-                    </td>
+                    <th>کاربر</th>
+                    <th>IP آخرین ورود</th>
+                    <th>نام سیستم</th>
+                    <th>تاریخ و ساعت آخرین ورود</th>
                 </tr>
-            @endforelse
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @forelse($users as $user)
+                    <tr>
+                        <td>
+                            <div class="cell-user">
+                                <div class="cell-avatar">{{ mb_substr($user->name, 0, 1) }}</div>
+                                <div>
+                                    <div style="font-weight:600;">
+                                        {{ $user->name }}
+                                        @if ($user->new_comment)<span class="badge badge-danger">نظر جدید</span>@endif
+                                    </div>
+                                    <div class="muted">{{ $user->unit ?: $user->email }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ $user->latestLogin->ip_address ?? '—' }}</td>
+                        <td>{{ $user->latestLogin->hostname ?? '—' }}</td>
+                        <td>
+                            @if($user->last_login_at)
+                                {{ \App\Support\Jalali::dateTime($user->last_login_at) }}
+                            @else
+                                <span class="badge badge-neutral">هنوز ورودی ثبت نشده</span>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="4"><div class="empty-state">هیچ کاربری ثبت نشده است.</div></td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 
-{{-- Pagination --}}
-<div class="mt-4">
-    {{-- {{ $users->links('vendor.pagination.tailwind') }} --}}
-</div>
+@include('partials.simple-pagination', ['paginator' => $users])
 
 @endsection

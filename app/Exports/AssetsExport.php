@@ -27,7 +27,7 @@ class AssetsExport implements FromCollection, WithHeadings, WithMapping
     public function map($asset): array
     {
         return [
-            $asset->user->name ?? '',
+            $asset->user->name ?? 'انبار',
             $asset->title,
             $asset->asset_number,
             $asset->created_at,

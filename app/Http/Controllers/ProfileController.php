@@ -24,17 +24,32 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = auth()->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $request->validate([
+            'name'        => 'required|string|max:255',
+            'department'  => 'required|string|max:255',
+            'unit'        => 'nullable|string|max:255',
+            'room_number' => 'nullable|string|max:255',
+            'floor'       => 'nullable|string|max:255',
+            'password'    => 'nullable|min:6|confirmed',
+        ]);
+
+        $user->name = $request->name;
+        $user->unit = $request->unit;
+        $user->department = $request->department;
+        $user->room_number = $request->room_number;
+        $user->floor = $request->floor;
+
+        if ($request->password) {
+            $user->password = bcrypt($request->password);
         }
 
-        $request->user()->save();
+        $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return back()->with('success', 'پروفایل با موفقیت بروزرسانی شد.');
     }
 
     /**

@@ -19,13 +19,25 @@
         </div>
 
         <div class="mb-4">
-            <label class="block mb-1 font-medium">شماره مال</label>
+            <label class="block mb-1 font-medium">شماره مال (مثال: 1278-1 / 2067-2)</label>
             <input type="text" name="asset_number"
                    class="w-full border rounded px-3 py-2"
                    required>
         </div>
 
         <div class="mb-4">
+            <label class="block mb-1 font-medium">تعداد</label>
+            <input type="number" name="count"
+                   class="w-full border rounded px-3 py-2">
+        </div>
+
+        <div class="mb-4">
+            <label class="block mb-1 font-medium">توضیحات</label>
+            <input type="text" name="description"
+                   class="w-full border rounded px-3 py-2">
+        </div>
+
+        {{-- <div class="mb-4">
             <label>ستاد</label>
             <select name="city" class="w-full border p-2 rounded">
                 <option value="مرکزی">مرکزی</option>
@@ -36,7 +48,7 @@
                 <option value="مهدیشهر">مهدیشهر</option>
                 <option value="میامی">میامی</option>
             </select>
-        </div>
+        </div> --}}
 
         <div class="mb-4">
             <label class="block mb-1">تاریخ بروزرسانی</label>
